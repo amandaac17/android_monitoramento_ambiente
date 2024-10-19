@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white">
+
+
+    <androidx.appcompat.widget.Toolbar
+
+
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/nagivation_bar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:title="Monitoramento Ambiente"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Monitoramento Ambiente"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="-4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+
+            <ImageButton
+                android:id="@+id/menu_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_menu_24"
+                android:contentDescription="Menu"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <!-- Título da Toolbar (nome do app) -->
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monitoramento Ambiente"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-medium"/>
+
+            <!-- Espaço flexível entre o título e o logotipo -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+
+            <ImageView
+                android:id="@+id/toolbar_logo"
+                android:layout_width="80dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+
+                android:src="@drawable/logo_lsdi_round" />
+        </LinearLayout>
+
+        <!-- Botão de menu (ícone de hambúrguer) à esquerda -->
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:text="Sala das ETs"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewTemperature"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/azul3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Ícone de Temperatura"
+                android:src="@drawable/temperaturas"
+                app:tint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/textViewTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:text="Temperatura: "
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Card de Umidade -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewHumidity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/azul2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewTemperature">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Ícone de Umidade"
+                android:src="@drawable/umidade"
+                app:tint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/textViewHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:text="Umidade: "
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Card de Presença de Gás -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewGasPresence"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/azul1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewHumidity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Ícone de Gás"
+                android:src="@drawable/detector_de_fumaca"
+                app:tint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/textViewGasPresence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:text="Presença de gás: "
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Campo de Entrada -->
+
+    <!-- Botão de Enviar -->
+
+    <EditText
+        android:id="@+id/editTextCommand"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="132dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="@color/azul_claro"
+        android:hint="Digite a temperatura desejada"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewGasPresence" />
+
+    <Button
+        android:id="@+id/buttonSend"
+        style="@style/CustomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:text="Enviar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCommand" />
+
+    <TextView
+        android:id="@+id/logTextView"
+        android:layout_width="245dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
