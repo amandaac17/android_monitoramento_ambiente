@@ -57,39 +57,18 @@ public class SalaEtsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sala_das_ets);
         checkPermission();
         setViews();
-        //initCDDL();
         initConnectExternalBroker();
         subscribeHMSoft();
         sendButton.setOnClickListener(clickListener);
     }
 
-    /*
-    @Override
-    protected void onPause(){
-        conExterno.unsubscribeAll();
-        conExterno.disconnect();
-        cddl.stopLocationSensor();
-        cddl.stopAllCommunicationTechnologies();
-        cddl.stopService();
-        super.onPause();
 
-    }
-    @Override
-    protected void onResume(){
-
-        initCDDL();
-        subscribeHMSoft();
-        super.onResume();
-    }*/
 
     @Override
     protected void onDestroy() {
 
         conExterno.unsubscribeAll();
         conExterno.disconnect();
-        //cddl.stopLocationSensor();
-        //cddl.stopAllCommunicationTechnologies();
-        //cddl.stopService();
         super.onDestroy();
     }
 
@@ -302,16 +281,4 @@ public class SalaEtsActivity extends AppCompatActivity {
     }
 
 
-    private boolean isValidTemperatureELBRUS(String input) {
-        if (input.isEmpty()) {
-            return false;
-        }
-
-        try {
-            int number = Integer.parseInt(input);
-            return number == 0 || (number >= 17 && number <= 27);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
 }

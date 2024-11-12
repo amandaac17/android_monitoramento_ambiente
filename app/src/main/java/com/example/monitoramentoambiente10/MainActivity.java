@@ -44,14 +44,7 @@ import br.ufma.lsdi.cddl.pubsub.SubscriberFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    private TextView logTextView;
-    private View sendButton;
-    private ConnectionImpl con;
-    private ConnectionImpl conExterno;
     private Spinner spinner;
-    private CDDL cddl;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

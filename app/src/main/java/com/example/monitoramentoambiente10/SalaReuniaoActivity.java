@@ -54,38 +54,16 @@ public class SalaReuniaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sala_reunioes);
         checkPermission();
         setViews();
-        //initCDDL();
         initConnectExternalBroker();
         subscribeHMSoft();
 
         sendButton.setOnClickListener(clickListener);
     }
-/*
-    @Override
-    protected void onPause(){
-
-        conExterno.unsubscribeAll();
-        conExterno.disconnect();
-        cddl.stopLocationSensor();
-        cddl.stopAllCommunicationTechnologies();
-        cddl.stopService();
-        super.onPause();
-    }
-    @Override
-    protected void onResume(){
-
-        initCDDL();
-        subscribeHMSoft();
-        super.onResume();
-    }
-*/
     @Override
     protected void onDestroy() {
         conExterno.unsubscribeAll();
         conExterno.disconnect();
-        //cddl.stopLocationSensor();
-        //cddl.stopAllCommunicationTechnologies();
-        //cddl.stopService();
+
 
         super.onDestroy();
     }
