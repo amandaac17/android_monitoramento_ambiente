@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MonitoramentoAmbiente1.0</string>
+    <string-array name="salas_array">
+        <item>Escolha uma opção</item>
+        <item>Sala das ETs</item>
+        <item>Sala de Reuniões</item>
+    </string-array>
+    <string name="spinner_prompt">Selecione a sala desejada</string>
+</resources>

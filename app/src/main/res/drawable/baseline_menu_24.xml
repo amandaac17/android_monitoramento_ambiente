@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:viewportHeight="24"
+    android:viewportWidth="24"
+    android:width="24dp"
+    android:tint="@android:color/white">
+
+    <!-- Primeira barra -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M3,6h18v2H3z" /> <!-- Barra superior, alinhada -->
+
+    <!-- Segunda barra -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M3,11h18v2H3z" /> <!-- Barra do meio, alinhada -->
+
+    <!-- Terceira barra -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M3,16h18v2H3z" /> <!-- Barra inferior, alinhada -->
+</vector>
