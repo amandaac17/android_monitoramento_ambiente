@@ -1,0 +1,14 @@
+.gradle/
+.idea/
+app/build.gradle.kts
+app/libs/
+app/proguard-rules.pro
+build.gradle.kts
+gradle.properties
+gradle/
+gradlew
+gradlew.bat
+local.properties
+out.ogv
+settings.gradle.kts
+app/release/
