@@ -103,7 +103,7 @@ public class SalaReuniaoActivity extends AppCompatActivity {
             public void onMessageArrived(Message message) {
 
                 Log.d("_MAIN", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + message);
-                if(message.getMouuid().equals("1-D4:36:39:DB:38:7D")) {
+                if(message.getMouuid().equals("1-D4:36:39:DB:34:68")) {
                     processData(message.getServiceValue());
                 }
 
@@ -165,7 +165,7 @@ public class SalaReuniaoActivity extends AppCompatActivity {
                 String m = String.format("{\"characteristicUUID\": \"00002a6f-0000-1000-8000-00805f9b34fb\", \"command\": %s}", comandoFormatado);
 
                 CommandMessage cm = new CommandMessage("MHUB_SALA_ETS",
-                        new MOUUID(TechnologyID.BLE.id, "D4:36:39:DB:38:7D").toString(),
+                        new MOUUID(TechnologyID.BLE.id, "D4:36:39:DB:34:68").toString(),
                         "HMSoft",
                         m);
                 //cm.setServiceValue(m);
