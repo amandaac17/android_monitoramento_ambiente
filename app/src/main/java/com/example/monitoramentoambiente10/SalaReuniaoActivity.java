@@ -42,10 +42,13 @@ public class SalaReuniaoActivity extends AppCompatActivity {
 
     private TextView logTextView;
     private View sendButton;
-    private ConnectionImpl con;
     private ConnectionImpl conExterno;
-    private CDDL cddl;
-    Subscriber sub;
+    Subscriber subscriber;
+    Publisher publisher;
+    String temperatura, umidade, gas, comandoOriginal, comandoFormatado, m;
+    TextView dataTextTemperature, dataTextHumidity, dataTextGas;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,28 +64,25 @@ public class SalaReuniaoActivity extends AppCompatActivity {
     }
     @Override
     protected void onDestroy() {
+
         conExterno.unsubscribeAll();
         conExterno.disconnect();
-
+        if(conExterno!=null){
+            conExterno = null;
+        }
+        if (subscriber!=null){
+            subscriber = null;
+        }
+        if (publisher!=null){
+            publisher = null;
+        }
 
         super.onDestroy();
     }
 
-    private void initCDDL() {
-
-        initConnectExternalBroker();
-        cddl = CDDL.getInstance();
-        cddl.setConnection(conExterno);
-        cddl.setContext(this);
-        cddl.startService();
-        cddl.startCommunicationTechnology(CDDL.INTERNAL_TECHNOLOGY_ID);
-        cddl.startCommunicationTechnology(CDDL.BLE_TECHNOLOGY_ID);
-        sub = SubscriberFactory.createSubscriber();
-
-    }
 
     private void initConnectExternalBroker() {
-        String host = "lsdi.ufma.br";
+        String host = "broker.hivemq.com";
         conExterno = ConnectionFactory.createConnection();
         conExterno.setClientId("amanda.cardoso@lsdi.ufma.br");
         conExterno.setHost(host);
@@ -93,35 +93,38 @@ public class SalaReuniaoActivity extends AppCompatActivity {
     }
 
 
-    protected void subscribeHMSoft(){
-        sub = SubscriberFactory.createSubscriber();
-        sub.addConnection(conExterno);
-        sub.subscribeServiceByName("HMSoft");
+    protected void subscribeHMSoft() {
+        if (subscriber == null) {
+            subscriber = SubscriberFactory.createSubscriber();
+            subscriber.addConnection(conExterno);
+            subscriber.subscribeServiceByName("HMSoft");
 
-        sub.setSubscriberListener(new ISubscriberListener() {
-            @Override
-            public void onMessageArrived(Message message) {
 
-                Log.d("_MAIN", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + message);
-                if(message.getMouuid().equals("1-D4:36:39:DB:34:68")) {
-                    processData(message.getServiceValue());
+            subscriber.setSubscriberListener(new ISubscriberListener() {
+                @Override
+                public void onMessageArrived(Message message) {
+
+                    Log.d("_MAIN", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + message);
+                    if (message.getMouuid().equals("1-D4:36:39:DB:34:68")) {
+                        processData(message.getServiceValue());
+                    }
+
+
                 }
-
-
-            }
-        });
+            });
+        }
     }
 
     private void processData(Object [] value) {
 
         runOnUiThread(() -> {
-            TextView dataTextTemperature = (TextView) findViewById(R.id.textViewTemperature1);
-            TextView dataTextHumidity = (TextView) findViewById(R.id.textViewHumidity);
-            TextView dataTextGas = (TextView) findViewById(R.id.textViewGasPresence1);
+            dataTextTemperature = (TextView) findViewById(R.id.textViewTemperature1);
+            dataTextHumidity = (TextView) findViewById(R.id.textViewHumidity);
+            dataTextGas = (TextView) findViewById(R.id.textViewGasPresence1);
 
-            String temperatura =  Double.toString ((Double) value[0]);
-            String umidade = Double.toString ((Double) value[1]);
-            String gas = Double.toString ((Double) value[2]);
+            temperatura =  Double.toString ((Double) value[0]);
+            umidade = Double.toString ((Double) value[1]);
+            gas = Double.toString ((Double) value[2]);
 
             if(gas.equals("1.0")){
                 gas = "presente";
@@ -148,9 +151,10 @@ public class SalaReuniaoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-
-            Publisher publisher = PublisherFactory.createPublisher();
-            publisher.addConnection(conExterno);
+            if(publisher==null) {
+                Publisher publisher = PublisherFactory.createPublisher();
+                publisher.addConnection(conExterno);
+            }
 
             TextView textoTemperatura = (TextView) findViewById(R.id.editTextCommand);
 
@@ -180,6 +184,17 @@ public class SalaReuniaoActivity extends AppCompatActivity {
         }
     };
 
+    private void clearViews(){
+        dataTextTemperature = (TextView) findViewById(R.id.textViewTemperature1);
+        dataTextHumidity = (TextView) findViewById(R.id.textViewHumidity1);
+        dataTextGas = (TextView) findViewById(R.id.textViewGasPresence1);
+
+        dataTextTemperature.setText("");
+        dataTextHumidity.setText("");
+        dataTextGas.setText("");
+    }
+
+
 
     private IConnectionListener connectionListener = new IConnectionListener() {
         @Override
@@ -194,12 +209,16 @@ public class SalaReuniaoActivity extends AppCompatActivity {
 
         @Override
         public void onConnectionLost() {
+            Log.d("ConnectionListener", "onConnectionLost chamado");
             logTextView.setText("Conexão perdida.");
+            clearViews();
+
         }
 
         @Override
         public void onDisconnectedNormally() {
             logTextView.setText("Uma disconexão normal ocorreu.");
+            clearViews();
         }
 
     };
