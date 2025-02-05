@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -43,10 +44,10 @@ public class SalaReuniaoActivity extends AppCompatActivity {
     private TextView logTextView;
     private View sendButton;
     private ConnectionImpl conExterno;
-    Subscriber subscriber;
-    Publisher publisher;
-    String temperatura, umidade, gas, comandoOriginal, comandoFormatado, m;
-    TextView dataTextTemperature, dataTextHumidity, dataTextGas;
+    private Subscriber subscriber;
+    private Publisher publisher;
+    private String temperatura, umidade, gas;
+
 
 
 
@@ -59,6 +60,8 @@ public class SalaReuniaoActivity extends AppCompatActivity {
         setViews();
         initConnectExternalBroker();
         subscribeHMSoft();
+        publisher = PublisherFactory.createPublisher();
+        publisher.addConnection(conExterno);
 
         sendButton.setOnClickListener(clickListener);
     }
@@ -118,9 +121,9 @@ public class SalaReuniaoActivity extends AppCompatActivity {
     private void processData(Object [] value) {
 
         runOnUiThread(() -> {
-            dataTextTemperature = (TextView) findViewById(R.id.textViewTemperature1);
-            dataTextHumidity = (TextView) findViewById(R.id.textViewHumidity);
-            dataTextGas = (TextView) findViewById(R.id.textViewGasPresence1);
+            TextView dataTextTemperature = (TextView) findViewById(R.id.textViewTemperature1);
+            TextView dataTextHumidity = (TextView) findViewById(R.id.textViewHumidity);
+            TextView dataTextGas = (TextView) findViewById(R.id.textViewGasPresence1);
 
             temperatura =  Double.toString ((Double) value[0]);
             umidade = Double.toString ((Double) value[1]);
@@ -151,43 +154,40 @@ public class SalaReuniaoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            if(publisher==null) {
-                Publisher publisher = PublisherFactory.createPublisher();
-                publisher.addConnection(conExterno);
+
+
+                TextView textoTemperatura = (TextView) findViewById(R.id.editTextCommand);
+
+                if (isValidTemperatureELBRUS(textoTemperatura.getText().toString())) {
+                    Toast.makeText(getApplicationContext(), "Temperatura válida", Toast.LENGTH_SHORT).show();
+
+
+                    String comandoOriginal = textoTemperatura.getText().toString() + ";";
+                    String comandoFormatado = formataComando(comandoOriginal); //transforma para bytes e depois string
+
+
+                    String m = String.format("{\"characteristicUUID\": \"00002a6f-0000-1000-8000-00805f9b34fb\", \"command\": %s}", comandoFormatado);
+
+                    CommandMessage cm = new CommandMessage("MHUB_SALA_ETS",
+                            new MOUUID(TechnologyID.BLE.id, "D4:36:39:DB:34:68").toString(),
+                            "HMSoft",
+                            m);
+                    //cm.setServiceValue(m);
+                    publisher.publish(cm);
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Temperatura inválida", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
 
-            TextView textoTemperatura = (TextView) findViewById(R.id.editTextCommand);
-
-            if(isValidTemperatureELBRUS(textoTemperatura.getText().toString())){
-                Toast.makeText(getApplicationContext(), "Temperatura válida", Toast.LENGTH_SHORT).show();
-
-
-                String comandoOriginal = textoTemperatura.getText().toString() + ";";
-                String comandoFormatado = formataComando(comandoOriginal); //transforma para bytes e depois string
-
-
-                String m = String.format("{\"characteristicUUID\": \"00002a6f-0000-1000-8000-00805f9b34fb\", \"command\": %s}", comandoFormatado);
-
-                CommandMessage cm = new CommandMessage("MHUB_SALA_ETS",
-                        new MOUUID(TechnologyID.BLE.id, "D4:36:39:DB:34:68").toString(),
-                        "HMSoft",
-                        m);
-                //cm.setServiceValue(m);
-                publisher.publish(cm);
-
-            }else{
-
-                Toast.makeText(getApplicationContext(), "Temperatura inválida", Toast.LENGTH_SHORT).show();
-
-            }
-
-        }
     };
-
     private void clearViews(){
-        dataTextTemperature = (TextView) findViewById(R.id.textViewTemperature1);
-        dataTextHumidity = (TextView) findViewById(R.id.textViewHumidity1);
-        dataTextGas = (TextView) findViewById(R.id.textViewGasPresence1);
+        TextView dataTextTemperature = (TextView) findViewById(R.id.textViewTemperature1);
+        TextView dataTextHumidity = (TextView) findViewById(R.id.textViewHumidity1);
+        TextView dataTextGas = (TextView) findViewById(R.id.textViewGasPresence1);
 
         dataTextTemperature.setText("");
         dataTextHumidity.setText("");
@@ -211,14 +211,13 @@ public class SalaReuniaoActivity extends AppCompatActivity {
         public void onConnectionLost() {
             Log.d("ConnectionListener", "onConnectionLost chamado");
             logTextView.setText("Conexão perdida.");
-            clearViews();
 
         }
 
         @Override
         public void onDisconnectedNormally() {
             logTextView.setText("Uma disconexão normal ocorreu.");
-            clearViews();
+
         }
 
     };
